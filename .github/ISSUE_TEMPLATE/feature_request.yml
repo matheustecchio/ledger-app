@@ -1,0 +1,59 @@
+name: Feature request
+description: Propose a scoped Ledger capability or improvement.
+title: "[Feature]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe the user problem before proposing implementation details. Review the documented MVP scope and deferred capabilities first.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and pull requests for a duplicate.
+          required: true
+        - label: I reviewed the README scope and architecture documentation.
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: User problem
+      description: Who needs this, and what problem are they trying to solve?
+    validations:
+      required: true
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: Describe observable behavior and what successful completion looks like.
+    validations:
+      required: true
+  - type: textarea
+    id: approach
+    attributes:
+      label: Possible approach
+      description: Optional implementation ideas, alternatives, or constraints.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Primary area
+      options:
+        - Accounts
+        - Authentication and users
+        - Transactions and transfers
+        - Categories and budgets
+        - Recurring transactions
+        - Reporting and dashboard
+        - Import and export
+        - Frontend experience
+        - Developer experience or documentation
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks and dependencies
+      description: Note financial correctness, privacy, security, migration, API, or sequencing concerns.

@@ -1,0 +1,68 @@
+name: Bug report
+description: Report reproducible incorrect behavior in Ledger.
+title: "[Bug]: "
+labels: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve Ledger. Do not include secrets, credentials, security vulnerabilities, or real financial data in this public issue.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and pull requests for a duplicate.
+          required: true
+        - label: This report does not disclose a suspected security vulnerability or sensitive data.
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Describe what happened and why it appears incorrect.
+      placeholder: A clear description of the observed behavior.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Use synthetic data and provide the smallest reliable sequence.
+      placeholder: |
+        1. Start Ledger with...
+        2. Create a synthetic account...
+        3. Observe...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: What should have happened instead?
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Affected area
+      options:
+        - Backend
+        - Frontend
+        - GraphQL API
+        - Database or migration
+        - Development tooling or documentation
+        - Unknown
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Include relevant OS, Java, Node.js, browser, and Docker versions without sensitive values.
+      render: text
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Additional evidence
+      description: Add sanitized logs, screenshots, or other context. Remove personal and financial data first.

@@ -1,0 +1,33 @@
+# ADR 0002: Keep Ledger web-based and local-first
+
+- Status: accepted
+- Date: 2026-10-04
+
+## Context
+
+Ledger must keep personal financial data on the user's machine while providing a practical path for continued development. A local database does not require a desktop user interface: a browser client can communicate with backend services that listen only on the local machine.
+
+The existing architecture already uses React, GraphQL, Spring Boot, and PostgreSQL. Packaging it as a desktop application would add a wrapper and distribution lifecycle while still requiring the Java backend and database to be bundled, managed, or replaced.
+
+## Decision
+
+Keep Ledger as a web-based, local-first application:
+
+- React runs in the user's browser.
+- Spring Boot exposes GraphQL on the local machine and remains authoritative for validation, ownership, financial behavior, and persistence.
+- PostgreSQL runs locally and stores data in a persistent Docker volume.
+- Development services bind to the loopback interface by default and must not be exposed to the network while Phase 0 uses an open GraphQL endpoint and fixed development identity.
+- Normal local use must not depend on a cloud account or internet connection.
+
+The target user experience is a single command or launcher that starts the database, backend, and frontend and then opens the local application URL. Phase 0 still starts those components separately; implementing full-stack Compose or an equivalent launcher is follow-up work.
+
+Desktop packaging with Electron or Tauri, replacing PostgreSQL with an embedded database, and cloud hosting are not part of the current product direction. Any such change requires a separate ADR because it changes distribution, operations, security, or portfolio goals.
+
+## Consequences
+
+- The project retains its Java, Spring, GraphQL, React, and PostgreSQL learning and portfolio value.
+- Financial data remains local by default without requiring a desktop wrapper.
+- The same browser frontend can support a future hosted mode if a later decision authorizes one.
+- Local startup currently involves multiple processes until the launcher or full-stack Compose milestone is implemented.
+- Users still need a supported browser and the local runtime prerequisites during development.
+- Backup and restore must operate on local data and will need an explicit user-facing workflow before real financial data is supported.
