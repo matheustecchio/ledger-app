@@ -18,6 +18,13 @@ describe("AccountsPage", () => {
                 currency: "EUR",
                 initialBalance: "1250.0000",
                 archived: false,
+              }, {
+                id: "df914c2c-b9d1-49ab-bda8-a477366b2165",
+                name: "Precision boundary",
+                type: "CURRENT",
+                currency: "EUR",
+                initialBalance: "999999999999999.9999",
+                archived: false,
               }],
             },
           },
@@ -30,5 +37,9 @@ describe("AccountsPage", () => {
     expect(await screen.findByText("Rainy day fund")).toBeInTheDocument();
     expect(screen.getByText("Savings · EUR")).toBeInTheDocument();
     expect(screen.getByText(/1,250\.00/)).toBeInTheDocument();
+    expect(screen.getByText((content, element) => (
+      element?.tagName === "STRONG"
+      && content.replace(/\D/g, "") === "9999999999999999999"
+    ))).toBeInTheDocument();
   });
 });

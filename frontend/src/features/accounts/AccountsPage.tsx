@@ -3,10 +3,42 @@ import { accountTypeLabels, CreateAccountForm } from "./CreateAccountForm";
 import { ACCOUNTS_QUERY, type AccountsData } from "./accounts.graphql";
 
 function formatMoney(amount: string, currency: string) {
-  return new Intl.NumberFormat(undefined, {
+  const match = /^(-?)(\d+)(?:\.(\d+))?$/.exec(amount);
+  if (!match) {
+    throw new Error("Invalid decimal amount");
+  }
+
+  const [, sign, integer, fraction = ""] = match;
+  const formatter = new Intl.NumberFormat(undefined, {
     style: "currency",
     currency,
-  }).format(Number(amount));
+    maximumFractionDigits: 4,
+  });
+  const minimumFractionDigits = formatter.resolvedOptions().minimumFractionDigits ?? 0;
+  let displayFraction = fraction.padEnd(4, "0");
+
+  while (displayFraction.length > minimumFractionDigits && displayFraction.endsWith("0")) {
+    displayFraction = displayFraction.slice(0, -1);
+  }
+
+  const groupedInteger = new Intl.NumberFormat(undefined, {
+    maximumFractionDigits: 0,
+  }).formatToParts(BigInt(integer)).filter(({ type }) => type === "integer" || type === "group");
+  let insertedInteger = false;
+
+  return formatter.formatToParts(sign === "-" ? -1n : 1n).flatMap((part) => {
+    if (part.type === "integer" || part.type === "group") {
+      if (insertedInteger) {
+        return [];
+      }
+      insertedInteger = true;
+      return groupedInteger;
+    }
+    if (part.type === "fraction") {
+      return [{ ...part, value: displayFraction }];
+    }
+    return [part];
+  }).map(({ value }) => value).join("");
 }
 
 export function AccountsPage() {
